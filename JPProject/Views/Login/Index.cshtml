@@ -12,6 +12,12 @@
 
     <table class="table table-condensed">
         <tr>
+            <td colspan="9">
+                @Html.ActionLink("Create", "Create", new { @class = "btn btn-outline-primary" })
+            </td>
+        </tr>
+
+        <tr>
             <th>
                 @Html.DisplayNameFor(model => model.PartnerID)
             </th>
@@ -49,9 +55,9 @@
                 <td>
                     @Html.DisplayFor(model => item.PartnerName)
                 </td>
-                <td>
+                @*<td>
                     @Html.DisplayFor(model => item.Password)
-                </td>
+                </td>*@
                 <td>
                     @Html.DisplayFor(model => item.EmailID)
                 </td>
@@ -70,14 +76,13 @@
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { id = item.PartnerID }, new { @class = "btn btn-outline-primary" }) |
                     @* @Html.ActionLink("Details", "Index", new {  id=item.ItemID }) |*@
-                    @Html.ActionLink("Delete", "Delete", new { id = item.PartnerID }, new { @class = "btn btn-outline-primary" })
+                    @Html.ActionLink("Delete", "Delete", new { id = item.PartnerID }, new { @class = "btn btn-outline-primary" }) 
+                   
                 </td>
             </tr>
         }
+        
         </table>
 
         </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+

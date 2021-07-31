@@ -7,89 +7,63 @@ using JPProject.Models;
 using System.Configuration;
 using System.Net.Http;
 
-
 namespace JPProject.Controllers
 {
-    public class LoginController : Controller
+    public class ProductsController : Controller
     {
-        public ActionResult CreateAccount() 
+        public ActionResult Login()
         {
             return View();
         }
 
-        //[HttpGet]
-        ////test
-        //public ActionResult Login(Login LoginCredentials)
-        //{
-        //    Uri uri = new Uri(URL);
-        //    Members vmi;
-        //    using (HttpClient client = new HttpClient())
-        //    {
-        //        client.BaseAddress = uri;
-        //        var response = client.GetAsync("TblMembers/" + LoginCredentials.Email);
-        //        response.Wait();
-
-        //        var result = response.Result;
-        //        if (result.IsSuccessStatusCode)
-        //        {
-        //            var job = result.Content.ReadAsAsync<Members>();
-        //            job.Wait();
-        //            vmi = job.Result;
-        //            return View(vmi);
-        //        }
-        //    }
-        //    return View();
-        //}
-        
-        public ActionResult Signin()
+        [HttpGet]
+        //test
+        public ActionResult Login(Login LoginCredentials)
         {
-
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult Signin(Login members)
-        {
-
-            Session["User"] = members.Email;
-
-            Uri url = new Uri(URL);
-            HttpClient httpClient = new HttpClient();
-            httpClient.BaseAddress = url;
-            var Response = httpClient.GetAsync("TblMembers/" + members.Email);
-            Response.Wait();
-            var result = Response.Result;
-
-            IEnumerable<Members> mem;
-            if (result.IsSuccessStatusCode)
+            Uri uri = new Uri(URN);
+            Products vmi;
+            using (HttpClient client = new HttpClient())
             {
-                var job = result.Content.ReadAsAsync<IEnumerable<Members>>();
-                job.Wait();
-                mem = job.Result;
-                return View(mem);
-            }
+                client.BaseAddress = uri;
+                var response = client.GetAsync("ProductData/" + LoginCredentials.Email);
+                response.Wait();
 
-            return RedirectToAction("Index");
+                var result = response.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var job = result.Content.ReadAsAsync<Products>();
+                    job.Wait();
+                    vmi = job.Result;
+                    return View(vmi);
+                }
+            }
+            return View();
         }
 
+        [HttpGet]
+        public ActionResult Login(string email, string password)
+        {
 
+            return View();
+        }
 
-        string URL = ConfigurationManager.AppSettings.Get("URI");
+        string URN = ConfigurationManager.AppSettings.Get("URN") + "ProductData";
         // GET: Login
         [HttpGet]
         public ActionResult Index()
         {
-            Uri url = new Uri(URL);
+
+            Uri urn = new Uri(URN);
             HttpClient httpClient = new HttpClient();
-            httpClient.BaseAddress = url;
-            var Response = httpClient.GetAsync("TblMembers");
+            httpClient.BaseAddress = urn ;
+            var Response = httpClient.GetAsync("ProductData");
             Response.Wait();
             var result = Response.Result;
 
-            IEnumerable<Members> mem;
+            IEnumerable<Products> mem;
             if (result.IsSuccessStatusCode)
             {
-                var job = result.Content.ReadAsAsync<IEnumerable<Members>>();
+                var job = result.Content.ReadAsAsync<IEnumerable<Products>>();
                 job.Wait();
                 mem = job.Result;
                 return View(mem);
@@ -112,14 +86,14 @@ namespace JPProject.Controllers
 
         // POST: Login/Create
         [HttpPost]
-        public ActionResult Create(Members members)
+        public ActionResult Create(Products Products)
         {
-            Uri uri = new Uri(URL);
+            Uri uri = new Uri(URN);
 
             using (HttpClient httpClient = new HttpClient())
             {
                 httpClient.BaseAddress = uri;
-                var response = httpClient.PostAsJsonAsync("TblMembers", members);
+                var response = httpClient.PostAsJsonAsync("ProductData", Products);
                 response.Wait();
 
                 var result = response.Result;
@@ -140,18 +114,18 @@ namespace JPProject.Controllers
         // GET: Login/Edit/5
         public ActionResult Edit(int id)
         {
-            Uri uri = new Uri(URL);
-            Members vmi;
+            Uri uri = new Uri(URN);
+            Products vmi;
             using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = uri;
-                var response = client.GetAsync("TblMembers/" + id.ToString());
+                var response = client.GetAsync("ProductData/" + id.ToString());
                 response.Wait();
 
                 var result = response.Result;
                 if (result.IsSuccessStatusCode)
                 {
-                    var job = result.Content.ReadAsAsync<Members>();
+                    var job = result.Content.ReadAsAsync<Products>();
                     job.Wait();
                     vmi = job.Result;
                     return View(vmi);
@@ -162,14 +136,14 @@ namespace JPProject.Controllers
 
         // POST: Login/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id,Members members)
+        public ActionResult Edit(int id, Products Products)
         {
-            Uri uri = new Uri(URL);
+            Uri uri = new Uri(URN);
 
             using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = uri;
-                var response = client.PutAsJsonAsync("TblMembers/"+id.ToString(),members);
+                var response = client.PutAsJsonAsync("ProductData/" + id.ToString(), Products);
                 response.Wait();
 
                 var result = response.Result;
@@ -184,18 +158,18 @@ namespace JPProject.Controllers
                 }
 
             }
-            return View(members);
+            return View(Products);
         }
 
         // GET: Login/Delete/5
         // [HttpDelete]
         public ActionResult Delete(int id)
         {
-            Uri uri = new Uri(URL);
+            Uri uri = new Uri(URN);
             using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = uri;
-                var response = client.DeleteAsync("TblMembers/" + id.ToString());
+                var response = client.DeleteAsync("ProductData/" + id.ToString());
                 response.Wait();
 
                 var result = response.Result;
