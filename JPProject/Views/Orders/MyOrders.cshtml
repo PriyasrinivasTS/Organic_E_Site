@@ -1,0 +1,74 @@
+﻿@model IEnumerable<JPProject.Models.Orders>
+
+@{
+    ViewBag.Title = "My Orders";
+}
+
+<h2>My Orders</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.OrderID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CustomerID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductDescription)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DeliveryAddress)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Pincode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrderdOn)
+        </th>
+        
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrderID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CustomerID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProductName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProductDescription)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Price)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Quantity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DeliveryAddress)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Pincode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrderdOn)
+        </td>
+        
+    </tr>
+}
+
+</table>

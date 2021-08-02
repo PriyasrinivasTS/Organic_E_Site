@@ -1,0 +1,89 @@
+﻿@model IEnumerable<JPProject.Models.Products>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@section Scripts
+{
+    <script>
+       $(function() {
+           var r = '@TempData["message"]';
+           if (r.length>0)
+           {
+                $('#myModal').modal('show');
+           }
+        });
+    </script>
+}
+ 
+
+<div>
+    <div class="modal fade" id="myModal" role="dialog">
+
+        <div class="modal-body">
+
+            <p style="color: whitesmoke; text-align:center; "><b>@TempData["message"]</b></p>
+
+        </div>
+
+    </div>
+</div>
+
+    <table class="table">
+        <tr>
+            <td colspan="5">
+          @if (Session["Partner"] != null)
+            {
+              @Html.ActionLink("Add Product", "Create", "Products");
+            }
+             </td >
+              </tr>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ProductID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ProductName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ProductDescription)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Price)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach(var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+             @if (Session["Partner"] != null)
+               {
+                         @Html.ActionLink("Edit", "Edit", "Products", new { id = item.ProductID }, new { @class = "btn btn-outline-primary" })                      
+                        @Html.ActionLink("Delete", "Delete", "Products", new { id = item.ProductID }, new { @class = "btn btn-outline-primary" })
+               }
+             else
+             {
+                @Html.ActionLink("Order", "Order", "Orders", new { id = item.ProductID }, new { @class = "btn btn-outline-primary" }) 
+                @Html.ActionLink("Details", "Details", "Products", new { id = item.ProductID }, new { @class = "btn btn-outline-primary" });
+              }
+                    </td>
+                </tr>
+
+            }
+
+</table>
