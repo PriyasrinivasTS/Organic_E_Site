@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<JPProject.Models.Members>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Partner Registeration";
 }
 
-<h2>Index</h2>
+<h2>Partner Registeration</h2>
 
 <div>
-    <h4>Members</h4>
+    
     <hr />
 
     <table class="table table-condensed">
@@ -74,6 +74,7 @@
                     @Html.DisplayFor(model => item.IsActive)
                 </td>   
                 <td>
+
                     @Html.ActionLink("Edit", "Edit", new { id = item.PartnerID }, new { @class = "btn btn-outline-primary" }) |
                     @* @Html.ActionLink("Details", "Index", new {  id=item.ItemID }) |*@
                     @Html.ActionLink("Delete", "Delete", new { id = item.PartnerID }, new { @class = "btn btn-outline-primary" }) 

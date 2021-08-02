@@ -15,10 +15,8 @@ namespace JPProject.Models
         [Required]
         public string ProductDescription { get; set; }
         [Required]
-        public string Price { get; set; }
-        [Required]
-        public string Quantity { get; set; }
-        [Required]
-        public bool isAvailable { get; set; }       
+        public double Price { get; set; }
+       
+              
     }
 }

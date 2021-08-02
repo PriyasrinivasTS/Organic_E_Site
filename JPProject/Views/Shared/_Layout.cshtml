@@ -3,12 +3,13 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - Organic Shoppings</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-inverse navbar-fixed-top" style="background-color:lightsteelblue; color:black">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -16,27 +17,51 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Organic Shoppings", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    <li>@Html.ActionLink("Sign In", "Signin", "Customers")</li>
-                    <li>@Html.ActionLink("View Cart", "Order", "Orders")</li>
+                    <li>@Html.ActionLink("Home", "Index", "Products")</li>
+                                                          
+                    @if (Session["Partner"] != null)
+                    {
+                        <li style="color:white">Loged in as "@Session["Partner"].ToString()"</li>
+                        <li>@Html.ActionLink("Sign Out", "SignOut", "Login")</li>
+
+                    }
+                    else if(Session["Partner"] == null && Session["User"] == null)
+                    {
+                        <li>@Html.ActionLink("Partner", "Signin", "Login")</li>
+                    }
+
+
+
+                    @if (Session["User"] != null)
+                    {
+                        <li>@Html.ActionLink("My Orders", "MyOrders", "Orders", new { id = Session["UserID"] }, new { @class = "btn btn-outline-primary" })</li>
+                        <li style="color:white, HighlightText"><b><span>Welcome </span>"@Session["User"].ToString()"</b></li>
+                       <li> @Html.ActionLink("Sign Out", "SignOut", "Customers")</li>
+                    }
+                    else if(Session["Partner"] == null && Session["User"] == null)
+                    {
+                       <li> @Html.ActionLink("Sign In", "Signin", "Customers")</li>
+                    }                   
                 </ul>
+                
             </div>
+           
         </div>
     </div>
-    <div class="container body-content">
+    <div class="container body-content" style="background-color:gainsboro; color:black">
         @RenderBody()
         <hr />
+        
+    </div>
+    <div style="background-color:lightsteelblue; color:black">
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - Organic Shoppings</p>
         </footer>
     </div>
-
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)

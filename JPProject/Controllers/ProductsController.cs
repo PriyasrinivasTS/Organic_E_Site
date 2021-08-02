@@ -47,7 +47,7 @@ namespace JPProject.Controllers
             return View();
         }
 
-        string URN = ConfigurationManager.AppSettings.Get("URN") + "ProductData";
+        string URN = ConfigurationManager.AppSettings.Get("URI") + "ProductData";
         // GET: Login
         [HttpGet]
         public ActionResult Index()
@@ -75,7 +75,24 @@ namespace JPProject.Controllers
         // GET: Login/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            Uri uri = new Uri(URN);
+            Products vmi;
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = uri;
+                var response = client.GetAsync("ProductData/" + id.ToString());
+                response.Wait();
+
+                var result = response.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var job = result.Content.ReadAsAsync<Products>();
+                    job.Wait();
+                    vmi = job.Result;
+                    return View(vmi);
+                }
+            }
+                return View();
         }
 
         // GET: Login/Create
@@ -100,7 +117,8 @@ namespace JPProject.Controllers
 
                 if (result.IsSuccessStatusCode)
                 {
-                    return RedirectToAction("Index");
+                    TempData["Sellermessage"] = "Your Product is added Successfully...!!";
+                    return RedirectToAction("Create");
                 }
                 else
                 {

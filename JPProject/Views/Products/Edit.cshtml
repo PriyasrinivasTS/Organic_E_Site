@@ -1,48 +1,26 @@
 ﻿@model JPProject.Models.Products
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "ProductEdit";
 }
 
-<h2>Add Your Product</h2>
+<h2>Edit Catalog</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
         <hr />
-
-        @section Scripts
-{
-        @Scripts.Render("~/bundles/jqueryval")
-            <script>
-       $(function() {
-           var r = '@TempData["Sellermessage"]';
-           if (r.length>0)
-           {
-                $('#myModal').modal('show');
-           }
-        });
-            </script>
-        }
-
-        <p style="text-align:end">
-            @Html.ActionLink("Partner", "Signin", "Login")
-        </p>
-        <div>
-            <div class="modal fade" id="myModal" role="dialog">
-
-                <div class="modal-body">
-
-                    <p style="color: whitesmoke; text-align:center; "><b>@TempData["Sellermessage"]</b></p>
-
-                </div>
-
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProductID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ProductID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.ProductID, "", new { @class = "text-danger" })
             </div>
         </div>
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })       
 
         <div class="form-group">
             @Html.LabelFor(model => model.ProductName, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -70,7 +48,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </div>
     </div>
@@ -78,3 +56,6 @@
 
 
 
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

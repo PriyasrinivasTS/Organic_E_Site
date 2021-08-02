@@ -23,7 +23,8 @@ namespace JPProject.Models
         public string PhoneNo { get; set; }
         [Required]
         public string Address { get; set; }
-        [Required]       
+        [Required]   
+        
         [DataType(DataType.PostalCode)]
         public int Pincode { get; set; }
         [Required]

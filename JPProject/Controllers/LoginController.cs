@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using JPProject.Models;
 using System.Configuration;
 using System.Net.Http;
-
+using System.Web.Security;
 
 namespace JPProject.Controllers
 {
@@ -17,29 +17,6 @@ namespace JPProject.Controllers
             return View();
         }
 
-        //[HttpGet]
-        ////test
-        //public ActionResult Login(Login LoginCredentials)
-        //{
-        //    Uri uri = new Uri(URL);
-        //    Members vmi;
-        //    using (HttpClient client = new HttpClient())
-        //    {
-        //        client.BaseAddress = uri;
-        //        var response = client.GetAsync("TblMembers/" + LoginCredentials.Email);
-        //        response.Wait();
-
-        //        var result = response.Result;
-        //        if (result.IsSuccessStatusCode)
-        //        {
-        //            var job = result.Content.ReadAsAsync<Members>();
-        //            job.Wait();
-        //            vmi = job.Result;
-        //            return View(vmi);
-        //        }
-        //    }
-        //    return View();
-        //}
         
         public ActionResult Signin()
         {
@@ -49,27 +26,51 @@ namespace JPProject.Controllers
 
         [HttpPost]
         public ActionResult Signin(Login members)
-        {
-
-            Session["User"] = members.Email;
-
+        {           
+                        
             Uri url = new Uri(URL);
             HttpClient httpClient = new HttpClient();
             httpClient.BaseAddress = url;
-            var Response = httpClient.GetAsync("TblMembers/" + members.Email);
+            var Response = httpClient.GetAsync("TblMembers?EmailID=" + members.Email);
             Response.Wait();
             var result = Response.Result;
 
-            IEnumerable<Members> mem;
+            List<Members> mem =new List<Members>();
             if (result.IsSuccessStatusCode)
             {
-                var job = result.Content.ReadAsAsync<IEnumerable<Members>>();
+                
+                var job = result.Content.ReadAsAsync<List<Members>>();
                 job.Wait();
                 mem = job.Result;
-                return View(mem);
+                if (mem.Count == 0)
+                {
+                    ModelState.AddModelError("not found", "User not found, Please do register");
+                    return View();
+                }
+                
+                else if ((mem.Any(m => m.Password == members.Password && m.EmailID == members.Email)))
+                {
+                    Session["Partner"] = members.Email;
+                    return RedirectToAction("Index", "Products");
+                }
+                else
+                {
+                    ModelState.AddModelError("Wrong", "Wrong Credentials");
+                    return View();
+                }
+               
             }
+            else
+            {
+                ModelState.AddModelError("Try again", "Something went wrong, Try again");
+                return View();
+            }                        
+        }
 
-            return RedirectToAction("Index");
+        public ActionResult SignOut()
+        {
+            Session.Clear();
+            return RedirectToAction("Index", "Products");
         }
 
 
@@ -126,7 +127,7 @@ namespace JPProject.Controllers
 
                 if (result.IsSuccessStatusCode)
                 {
-                    return RedirectToAction("Index");
+                    return RedirectToAction("SignIn");
                 }
                 else
                 {

@@ -7,8 +7,7 @@ using System.Web;
 namespace JPProject.Models
 {
     public class Login
-    {
-        public string Customer_Partner { get; set; }
+    {       
         [Required]
         [EmailAddress]
         public string Email { get; set; }

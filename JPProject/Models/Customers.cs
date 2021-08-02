@@ -8,7 +8,7 @@ namespace JPProject.Models
 {
     public class Customers
     {
-        [Required]
+        [Required]       
         public int CustomerID { get; set; }
         [Required]
         public string CustomerName { get; set; }        
@@ -23,7 +23,7 @@ namespace JPProject.Models
         public string PhoneNo { get; set; }
         [Required]
         public string Address { get; set; }
-        [Required]
+        [Required]        
         [DataType(DataType.PostalCode)]
         public int Pincode { get; set; }
         
