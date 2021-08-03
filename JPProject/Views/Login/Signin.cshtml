@@ -5,11 +5,37 @@
 }
 
 <h2>Partner Sign In</h2>
+@section Scripts
+{
+<script>
+    $(function () {
+        var r = '@TempData["Success"]';
+           if (r.length>0)
+           {
+                $('#myModal').modal('show');
+           }
+        });
+</script>
+    }
+
+<div>
+    <div class="modal fade" id="myModal" role="dialog">
+
+        <div class="modal-body">
+
+            <p style="color: whitesmoke; text-align:center; "><b>@TempData["Success"]</b></p>
+
+        </div>
+
+    </div>
+</div>
 
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
     <div class="form-horizontal">
+
+        
         @Html.ValidationSummary(false, "", new { @class = "text-danger" })
      
 

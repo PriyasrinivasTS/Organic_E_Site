@@ -85,6 +85,22 @@ namespace JPProject.Controllers
             using (HttpClient httpClient = new HttpClient())
             {
                 httpClient.BaseAddress = uri;
+                var Response = httpClient.GetAsync("TblMembers?EmailID=" + customers.EmailID);
+                Response.Wait();
+                var res = Response.Result;
+                List<Customers> cust = new List<Customers>();
+                if (res.IsSuccessStatusCode)
+                {
+
+                    var job = res.Content.ReadAsAsync<List<Customers>>();
+                    job.Wait();
+                    cust = job.Result;
+                    if (cust.Count != 0)
+                    {
+                        ModelState.AddModelError("not found", "User Email is already registered, please Sign in");
+                        return View();
+                    }
+                }
                 var response = httpClient.PostAsJsonAsync("Customer", customers);
                 response.Wait();
 
@@ -92,7 +108,10 @@ namespace JPProject.Controllers
 
                 if (result.IsSuccessStatusCode)
                 {
-                    return RedirectToAction("Index", "Products");
+                    ModelState.Clear();
+                    //ModelState.AddModelError("Registered", "Registered Successfully!!");
+                    TempData["SuccessC"] = "Registered Successfully!!";
+                    return RedirectToAction("Signin");
                 }
                 else
                 {

@@ -5,7 +5,30 @@
 }
 
 <h2>Customer Sign in</h2>
+@section Scripts
+{
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+       $(function() {
+           var r = '@TempData["SuccessC"]';
+           if (r.length>0)
+           {
+                $('#myModal').modal('show');
+           }
+        });
+</script>
+    }
+<div>
+    <div class="modal fade" id="myModal" role="dialog">
 
+        <div class="modal-body">
+
+            <p style="color: whitesmoke; text-align:center; "><b>@TempData["SuccessC"]</b></p>
+
+        </div>
+
+    </div>
+</div>
 
 @using (Html.BeginForm()) 
 {
@@ -44,6 +67,4 @@
     @Html.ActionLink("New User? Register here", "Create")
 </div>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+
