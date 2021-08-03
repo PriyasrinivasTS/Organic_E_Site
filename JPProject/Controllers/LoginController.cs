@@ -51,6 +51,7 @@ namespace JPProject.Controllers
                 else if ((mem.Any(m => m.Password == members.Password && m.EmailID == members.Email)))
                 {
                     Session["Partner"] = members.Email;
+                    Session["PartnerID"] = mem.FirstOrDefault(m=> m.EmailID==members.Email).PartnerID;
                     return RedirectToAction("Index", "Products");
                 }
                 else
@@ -120,14 +121,34 @@ namespace JPProject.Controllers
             using (HttpClient httpClient = new HttpClient())
             {
                 httpClient.BaseAddress = uri;
-                var response = httpClient.PostAsJsonAsync("TblMembers", members);
+                var Response = httpClient.GetAsync("TblMembers?EmailID=" + members.EmailID);
+                Response.Wait();
+                var res = Response.Result;
+                List<Members> mem = new List<Members>();
+                if (res.IsSuccessStatusCode)
+                {
+
+                    var job = res.Content.ReadAsAsync<List<Members>>();
+                    job.Wait();
+                    mem = job.Result;
+                    if (mem.Count != 0)
+                    {
+                        ModelState.AddModelError("not found", "Your Email is already registered, please Sign in");
+                        return View();
+                    }
+                }
+
+                    var response = httpClient.PostAsJsonAsync("TblMembers", members);
                 response.Wait();
 
                 var result = response.Result;
 
                 if (result.IsSuccessStatusCode)
                 {
-                    return RedirectToAction("SignIn");
+                    ModelState.Clear();
+                    TempData["Success"] = "Registered Successfully!!";
+                    //ModelState.AddModelError("Registered", "Registered Successfully!!");
+                    return RedirectToAction("Signin");
                 }
                 else
                 {

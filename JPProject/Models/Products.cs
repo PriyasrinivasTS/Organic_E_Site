@@ -16,7 +16,8 @@ namespace JPProject.Models
         public string ProductDescription { get; set; }
         [Required]
         public double Price { get; set; }
-       
-              
+       [Required]
+        public int PartnerID { get; set; }
+
     }
 }

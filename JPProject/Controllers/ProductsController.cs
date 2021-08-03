@@ -57,6 +57,11 @@ namespace JPProject.Controllers
             HttpClient httpClient = new HttpClient();
             httpClient.BaseAddress = urn ;
             var Response = httpClient.GetAsync("ProductData");
+            if (Session["PartnerID"]!= null)
+            {
+                 Response = httpClient.GetAsync("ProductData?PartnerID=" + Session["PartnerID"]);
+            }
+            
             Response.Wait();
             var result = Response.Result;
 
@@ -110,15 +115,17 @@ namespace JPProject.Controllers
             using (HttpClient httpClient = new HttpClient())
             {
                 httpClient.BaseAddress = uri;
+                Products model = new Products();
                 var response = httpClient.PostAsJsonAsync("ProductData", Products);
                 response.Wait();
 
                 var result = response.Result;
 
                 if (result.IsSuccessStatusCode)
-                {
+                {                    
                     TempData["Sellermessage"] = "Your Product is added Successfully...!!";
-                    return RedirectToAction("Create");
+                    ModelState.Clear();
+                    return View();
                 }
                 else
                 {
